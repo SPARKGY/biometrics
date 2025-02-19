@@ -225,7 +225,7 @@
                 return;
             }
 
-            cuilFileName = file.name;
+            cuilFileName = file.name.split(".")[0]; // Get the file name without extension
 
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -258,14 +258,14 @@
         // Descargar los archivos como un ZIP
         downloadBtn.addEventListener("click", () => {
             const zip = new JSZip();
-            zip.file(cuilFileName, cuilFileContent, { base64: true });
-            zip.file("foto.jpg", canvas.toDataURL("image/jpeg").split(",")[1], { base64: true });
+            zip.file(`${cuilFileName}.pdf`, cuilFileContent, { base64: true });
+            zip.file(`${cuilFileName}.jpg`, canvas.toDataURL("image/jpeg").split(",")[1], { base64: true });
 
             zip.generateAsync({ type: "blob" })
                 .then((content) => {
                     const link = document.createElement("a");
                     link.href = URL.createObjectURL(content);
-                    link.download = "resultado.zip";
+                    link.download = `${cuilFileName}.zip`;
                     link.click();
                     statusMsg.innerText = "✅ Archivos descargados con éxito.";
                 })
